@@ -1,10 +1,10 @@
 .PHONY: clean run
 .SILENT:
 
-pso: pso.o
-	g++ -o pso pso.o
+pso: main.cpp pso.o
+	g++ -o pso main.cpp pso.o
 
-pso.o: pso.cpp
+pso.o: pso.h pso.cpp
 	g++ -c -o pso.o pso.cpp
 
 clean:
