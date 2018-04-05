@@ -10,7 +10,12 @@ namespace pso {
 		double& operator[](std::size_t idx);
 		const double& operator[](std::size_t idx) const;
 		solution operator+(const solution &b) const;
+		solution operator-(const solution &b) const;
+		solution operator*(const solution &b) const;
 	};
+
+	template<size_t SIZE>
+	solution<SIZE> operator*(const double a, const solution<SIZE> &b);
 
 	template<size_t SIZE>
 	class particle {
@@ -18,12 +23,11 @@ namespace pso {
 		solution<SIZE> _speed;
 
 		solution<SIZE> _pbest;
-		std::vector<particle<SIZE>*> neighbors;
+		double _val_pbest;
 
 		public:
 		const solution<SIZE> pbest() const;
-		const solution<SIZE> nbest() const;
-		void update();
+		solution<SIZE> update(double c1, double c2, solution<SIZE> gbest);
 		virtual double evaluate() = 0;
 	};
 }

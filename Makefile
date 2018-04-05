@@ -1,5 +1,5 @@
 .PHONY: clean run
-.SILENT:
+#.SILENT:
 
 pso: main.cpp pso.o
 	g++ -o pso main.cpp pso.o
