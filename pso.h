@@ -24,9 +24,13 @@ namespace pso {
 		solution _pbest;
 		double _val_pbest;
 
+		std::vector<particle*> _neighbors;
+
 		public:
 		const solution pbest() const;
-		solution update(double c1, double c2, solution gbest);
+		const solution nbest() const;
+		void add_neighbor(particle* neightbor);
+		solution update(double c1, double c2);
 		virtual double evaluate() = 0;
 	};
 }

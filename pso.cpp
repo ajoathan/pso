@@ -58,18 +58,34 @@ namespace pso {
 		return _pbest;
 	}
 
-	solution particle::update(double c1, double c2, solution gbest) {
+	const solution particle::nbest() const {
+		solution nbest(_pbest.size());
+		double val_nbest = 0;
+		for (const auto& sol : _neighbors) {
+			if (sol->_val_pbest > val_nbest) {
+				val_nbest = sol->_val_pbest;
+				nbest = sol->_pbest;
+			}
+		}
+		return nbest;
+	}
+
+	void particle::add_neighbor(particle* neightbor) {
+		_neighbors.push_back(neightbor);
+	}
+
+	solution particle::update(double c1, double c2) {
 		double psi = c1 + c2;
 		double x = 2 / abs (2 - psi - sqrt(psi*psi - 4*psi));
 
-		solution e1(gbest.size()), e2(gbest.size());
-		for (int i=0; i<gbest.size(); i++) {
+		solution e1(_pbest.size()), e2(_pbest.size());
+		for (int i=0; i<_pbest.size(); i++) {
 			e1[i] = (double) rand() / RAND_MAX;
 			e2[i] = (double) rand() / RAND_MAX;
 		}
 
 		_speed = x * (_speed + c1 * e1 * (_pbest - _actual)
-				+ c2 * e2 * (gbest - _actual));
+				+ c2 * e2 * (nbest() - _actual));
 		_actual = _actual + _speed;
 
 		if (evaluate() > _val_pbest) {
