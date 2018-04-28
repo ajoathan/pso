@@ -4,65 +4,66 @@
 #include "pso.h"
 
 namespace pso {
-	template<size_t SIZE>
-	double& solution<SIZE>::operator[](std::size_t idx) {
+	solution::solution(std::size_t size) {
+		for (int i=0; i<size; i++) {
+			values.push_back(0);
+		}
+	}
+
+	std::size_t solution::size() const {
+		return values.size();
+	}
+
+	double& solution::operator[](std::size_t idx) {
 		return values[idx];
 	}
 
-	template<size_t SIZE>
-	const double& solution<SIZE>::operator[](std::size_t idx) const {
+	const double& solution::operator[](std::size_t idx) const {
 		return values[idx];
 	}
 
-	template<size_t SIZE>
-	solution<SIZE> solution<SIZE>::operator+(const solution &b) const {
-		solution<SIZE> ret;
-		for (int i=0; i<SIZE; i++) {
+	solution solution::operator+(const solution &b) const {
+		solution ret(b.size());
+		for (int i=0; i<values.size(); i++) {
 			ret[i] = values[i] + b[i];
 		}
 		return ret;
 	}
 
-	template<size_t SIZE>
-	solution<SIZE> solution<SIZE>::operator-(const solution &b) const {
-		solution<SIZE> ret;
-		for (int i=0; i<SIZE; i++) {
+	solution solution::operator-(const solution &b) const {
+		solution ret(b.size());
+		for (int i=0; i<values.size(); i++) {
 			ret[i] = values[i] - b[i];
 		}
 		return ret;
 	}
 
-	template<size_t SIZE>
-	solution<SIZE> solution<SIZE>::operator*(const solution &b) const {
-		solution<SIZE> ret;
-		for (int i=0; i<SIZE; i++) {
+	solution solution::operator*(const solution &b) const {
+		solution ret(b.size());
+		for (int i=0; i<values.size(); i++) {
 			ret[i] = values[i] * b[i];
 		}
 		return ret;
 	}
 
-	template<size_t SIZE>
-	solution<SIZE> operator*(const double a, const solution<SIZE> &b) {
-		solution<SIZE> ret;
-		for (int i=0; i<SIZE; i++) {
+	solution operator*(const double &a, const solution &b) {
+		solution ret(b.size());
+		for (int i=0; i<b.size(); i++) {
 			ret[i] = a * b[i];
 		}
 		return ret;
 	}
 
-	template<size_t SIZE>
-	const solution<SIZE> particle<SIZE>::pbest() const {
+	const solution particle::pbest() const {
 		return _pbest;
 	}
 
-	template<size_t SIZE>
-	solution<SIZE> particle<SIZE>::update(
-			double c1, double c2, solution<SIZE> gbest) {
+	solution particle::update(double c1, double c2, solution gbest) {
 		double psi = c1 + c2;
 		double x = 2 / abs (2 - psi - sqrt(psi*psi - 4*psi));
 
-		solution<SIZE> e1, e2;
-		for (int i=0; i<SIZE; i++) {
+		solution e1(gbest.size()), e2(gbest.size());
+		for (int i=0; i<gbest.size(); i++) {
 			e1[i] = (double) rand() / RAND_MAX;
 			e2[i] = (double) rand() / RAND_MAX;
 		}
@@ -77,8 +78,5 @@ namespace pso {
 		}
 		return _actual;
 	}
-
-	template class solution<5>;
-	template class particle<5>;
 }
 

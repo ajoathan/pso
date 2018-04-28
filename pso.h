@@ -2,11 +2,12 @@
 #include<vector>
 
 namespace pso {
-	template<size_t SIZE>
 	class solution {
-		double values[SIZE];
+		std::vector<double> values;
 
 		public:
+		solution(std::size_t size);
+		std::size_t size() const;
 		double& operator[](std::size_t idx);
 		const double& operator[](std::size_t idx) const;
 		solution operator+(const solution &b) const;
@@ -14,20 +15,18 @@ namespace pso {
 		solution operator*(const solution &b) const;
 	};
 
-	template<size_t SIZE>
-	solution<SIZE> operator*(const double a, const solution<SIZE> &b);
+	solution operator*(const double &a, const solution &b);
 
-	template<size_t SIZE>
 	class particle {
-		solution<SIZE> _actual;
-		solution<SIZE> _speed;
+		solution _actual;
+		solution _speed;
 
-		solution<SIZE> _pbest;
+		solution _pbest;
 		double _val_pbest;
 
 		public:
-		const solution<SIZE> pbest() const;
-		solution<SIZE> update(double c1, double c2, solution<SIZE> gbest);
+		const solution pbest() const;
+		solution update(double c1, double c2, solution gbest);
 		virtual double evaluate() = 0;
 	};
 }
